@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.FloatMath;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,7 +37,10 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Getting Location Updates.
@@ -96,6 +100,8 @@ public class MainActivity extends ActionBarActivity implements
     protected TextView mLastUpdateTimeTextView;
     protected TextView mLatitudeTextView;
     protected TextView mLongitudeTextView;
+    protected TextView mDistanceTextView;
+    protected TextView mSpeedTextView;
 
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
@@ -108,6 +114,20 @@ public class MainActivity extends ActionBarActivity implements
      */
     protected String mLastUpdateTime;
 
+    /**
+     * Save information about coordinates
+     */
+    private double previousLongitude;
+    private double localLongtitude;
+    private double previousLatitude;
+    private double localLatitude;
+
+    /**
+     * Save information about time between measurements
+     */
+    private Date previousDate;
+    private Date localDate;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +139,8 @@ public class MainActivity extends ActionBarActivity implements
         mLatitudeTextView = (TextView) findViewById(R.id.latitude_text);
         mLongitudeTextView = (TextView) findViewById(R.id.longitude_text);
         mLastUpdateTimeTextView = (TextView) findViewById(R.id.last_update_time_text);
+        mDistanceTextView = (TextView) findViewById(R.id.distance_text);
+        mSpeedTextView = (TextView) findViewById(R.id.speed_text);
 
         mRequestingLocationUpdates = false;
         mLastUpdateTime = "";
@@ -263,7 +285,64 @@ public class MainActivity extends ActionBarActivity implements
             mLatitudeTextView.setText(String.valueOf(mCurrentLocation.getLatitude()));
             mLongitudeTextView.setText(String.valueOf(mCurrentLocation.getLongitude()));
             mLastUpdateTimeTextView.setText(mLastUpdateTime);
+
+            localLatitude = Double.parseDouble(mLatitudeTextView.getText().toString());
+            localLongtitude = Double.parseDouble(mLongitudeTextView.getText().toString());
+            double newDistance = Math.round(gps2m(previousLatitude, previousLongitude, localLatitude, localLongtitude) * 100) / 100.0;
+            if (!mStartUpdatesButton.isEnabled())
+                mDistanceTextView.setText(String.valueOf(newDistance) + " m");
+            previousLatitude = localLatitude != 0 ? localLatitude : previousLongitude;
+            previousLongitude = localLongtitude != 0 ? localLongtitude : previousLatitude;
+
+            if (!mStartUpdatesButton.isEnabled())
+                mSpeedTextView.setText(String.valueOf(timeToSpeed()));
+
         }
+    }
+
+    /**
+     * Calculates distance between two measures.
+     */
+    private double gps2m(double lat_a, double lng_a, double lat_b, double lng_b) {
+        double pk = (double) (180/3.14169);
+
+        double a1 = lat_a / pk;
+        double a2 = lng_a / pk;
+        double b1 = lat_b / pk;
+        double b2 = lng_b / pk;
+
+        double t1 = Math.cos(a1)*Math.cos(a2)*Math.cos(b1)*Math.cos(b2);
+        double t2 = Math.cos(a1)*Math.sin(a2)*Math.cos(b1)*Math.sin(b2);
+        double t3 = Math.sin(a1)*Math.sin(b1);
+        double tt = Math.acos(t1 + t2 + t3);
+
+        return 6366000*tt;
+    }
+
+    /**
+     * Calculates time difference between measurements and speed of the object
+     */
+
+    protected String timeToSpeed() {
+        double timeValueMS = 0;
+        String localDateMS = "";
+
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss aa");
+
+            localDate = dateFormat.parse(mLastUpdateTime);
+
+            localDateMS = String.valueOf(localDate.getTime());
+/*            long previousDateMs = previousDate.getTime();
+            timeValueMS = (localDateMs - previousDateMs) / Double.parseDouble(mDistanceTextView.getText().toString());
+*/
+            previousDate = localDate;
+        }
+        catch (ParseException e) {
+            mSpeedTextView.setText(e.getMessage());
+        }
+
+        return localDateMS ; //  String.valueOf(timeValueMS);
     }
 
     /**
@@ -389,9 +468,11 @@ public class MainActivity extends ActionBarActivity implements
         String height = heightText.getText().toString();
         String weight = weightText.getText().toString();
         String invite = inviteText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, height);
-        intent.putExtra(EXTRA_MESSAGE, weight);
-        intent.putExtra(EXTRA_MESSAGE, invite);
+        Bundle extras = new Bundle();
+        extras.putString("EXTRA_HEIGHT", height);
+        extras.putString("EXTRA_WEIGHT", weight);
+        extras.putString("EXTRA_INVITE", invite);
+        intent.putExtras(extras);
         startActivity(intent);
     }
 }

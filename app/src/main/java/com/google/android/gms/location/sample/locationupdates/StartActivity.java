@@ -12,6 +12,11 @@ public class StartActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        Bundle extras = getIntent().getExtras();
+        String height = extras.getString("EXTRA_HEIGHT");
+        String weight = extras.getString("EXTRA_WEIGHT");
+        String invite = extras.getString("EXTRA_INVITE");
     }
 
     @Override

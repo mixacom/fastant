@@ -136,8 +136,8 @@
         android:layout_height="wrap_content"
         android:text="Invite:"
         android:id="@+id/invite"
-        android:layout_marginTop="38dp"
-        android:layout_below="@+id/heightText"
+        android:layout_alignBaseline="@+id/inviteText"
+        android:layout_alignBottom="@+id/inviteText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -145,8 +145,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/inviteText"
-        android:layout_alignBaseline="@+id/invite"
-        android:layout_alignBottom="@+id/invite"
+        android:layout_below="@+id/editText"
         android:layout_toRightOf="@+id/invite"
         android:layout_toLeftOf="@+id/send_button"
         android:layout_toStartOf="@+id/send_button" />
@@ -156,10 +155,92 @@
         android:layout_height="wrap_content"
         android:text="Send"
         android:id="@+id/send_button"
-        android:layout_alignTop="@+id/inviteText"
+        android:onClick="startRunning"
+        android:layout_alignBottom="@+id/inviteText"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="startRunning"/>
+        android:layout_alignParentEnd="true" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distance (km):"
+        android:id="@+id/distance_button"
+        android:layout_below="@+id/heightText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:checked="false"
+        android:layout_alignRight="@+id/start_updates_button"
+        android:layout_alignEnd="@+id/start_updates_button" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time (min):    "
+        android:id="@+id/timeButton"
+        android:checked="false"
+        android:layout_below="@+id/distanceText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/distanceText"
+        android:layout_below="@+id/heightText"
+        android:layout_alignRight="@+id/stop_updates_button"
+        android:layout_alignEnd="@+id/stop_updates_button"
+        android:layout_toEndOf="@+id/distance_button"
+        android:layout_toRightOf="@+id/distance_button" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_below="@+id/distance_button"
+        android:layout_alignRight="@+id/distanceText"
+        android:layout_alignEnd="@+id/distanceText"
+        android:layout_toRightOf="@+id/timeButton"
+        android:layout_toEndOf="@+id/timeButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/distancetextview"
+        android:id="@+id/distance_label"
+        android:layout_below="@+id/last_update_time_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/default_text_size" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/distance_text"
+        android:layout_below="@+id/distance_label"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/last_update_time_text"
+        android:layout_alignEnd="@+id/last_update_time_text" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/speedlabel"
+        android:id="@+id/speed_label"
+        android:textSize="@dimen/default_text_size"
+        android:layout_below="@+id/distance_text"
+        android:layout_alignLeft="@+id/distance_text"
+        android:layout_alignStart="@+id/distance_text" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/speed_text"
+        android:layout_below="@+id/speed_label"
+        android:layout_alignLeft="@+id/speed_label"
+        android:layout_alignStart="@+id/speed_label"
+        android:textSize="@dimen/default_text_size"
+        android:text="0.0000001" />
 
 
 </RelativeLayout>

@@ -11,8 +11,45 @@
         android:layout_height="wrap_content"
         android:id="@+id/accept"
         android:textStyle="bold"
-        android:layout_alignParentTop="true"
+        android:textSize="20dp"
+        android:layout_alignBottom="@+id/start_button"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:id="@+id/start_button"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/accept"
+        android:layout_toEndOf="@+id/accept" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Latitude: "
+        android:id="@+id/latitude"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Longitude: "
+        android:id="@+id/longitude"
+        android:layout_marginTop="24dp"
+        android:layout_below="@+id/latitude"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lasttime"
+        android:layout_marginTop="23dp"
+        android:layout_below="@+id/longitude"
+        android:text="Last Location Update Game: " />
 
 </RelativeLayout>
