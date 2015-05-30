@@ -16,12 +16,14 @@
 
 package com.google.android.gms.location.sample.locationupdates;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,7 @@ public class MainActivity extends ActionBarActivity implements
         ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
     protected static final String TAG = "location-updates-sample";
+    public final static String EXTRA_MESSAGE = "mainActivity.MESSAGE";
 
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
@@ -376,5 +379,19 @@ public class MainActivity extends ActionBarActivity implements
         savedInstanceState.putParcelable(LOCATION_KEY, mCurrentLocation);
         savedInstanceState.putString(LAST_UPDATED_TIME_STRING_KEY, mLastUpdateTime);
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    public void startRunning(View view) {
+        Intent intent = new Intent(this, StartActivity.class);
+        EditText heightText = (EditText) findViewById(R.id.heightText);
+        EditText weightText = (EditText) findViewById(R.id.weightText);
+        EditText inviteText = (EditText) findViewById(R.id.inviteText);
+        String height = heightText.getText().toString();
+        String weight = weightText.getText().toString();
+        String invite = inviteText.getText().toString();
+        intent.putExtra(EXTRA_MESSAGE, height);
+        intent.putExtra(EXTRA_MESSAGE, weight);
+        intent.putExtra(EXTRA_MESSAGE, invite);
+        startActivity(intent);
     }
 }

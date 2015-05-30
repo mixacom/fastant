@@ -17,79 +17,149 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/layout_padding">
+    android:padding="@dimen/layout_padding"
+    android:id="@+id/main">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Height (cm): "
+        android:id="@+id/height"
+        android:layout_alignBaseline="@+id/heightText"
+        android:layout_alignBottom="@+id/heightText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Weight (kg): "
+        android:id="@+id/weight"
+        android:layout_alignBaseline="@+id/heightText"
+        android:layout_alignBottom="@+id/heightText"
+        android:layout_alignLeft="@+id/stop_updates_button"
+        android:layout_alignStart="@+id/stop_updates_button" />
 
     <Button
         android:id="@+id/start_updates_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="@dimen/ui_group_top_margin"
         android:onClick="startUpdatesButtonHandler"
-        android:text="@string/start_updates" />
+        android:text="@string/start_updates"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/stop_updates_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/ui_group_top_margin"
         android:enabled="false"
         android:onClick="stopUpdatesButtonHandler"
-        android:text="@string/stop_updates" />
+        android:text="@string/stop_updates"
+        android:layout_alignTop="@+id/start_updates_button"
+        android:layout_toRightOf="@+id/last_update_time_label"
+        android:layout_toEndOf="@+id/last_update_time_label" />
 
     <TextView
         android:id="@+id/latitude_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/start_updates_button"
-        android:layout_marginTop="@dimen/ui_group_top_margin"
         android:text="@string/latitude_label"
-        android:textSize="@dimen/default_text_size" />
+        android:textSize="@dimen/default_text_size"
+        android:layout_below="@+id/stop_updates_button"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/latitude_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/latitude_label"
-        android:layout_marginLeft="@dimen/small_margin_left"
-        android:layout_toRightOf="@+id/latitude_label"
-        android:textSize="@dimen/default_text_size" />
+        android:textSize="@dimen/default_text_size"
+        android:layout_below="@+id/latitude_label"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/longitude_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/latitude_label"
         android:text="@string/longitude_label"
-        android:textSize="@dimen/default_text_size" />
+        android:textSize="@dimen/default_text_size"
+        android:layout_below="@+id/latitude_text"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/longitude_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/longitude_label"
-        android:layout_marginLeft="@dimen/small_margin_left"
-        android:layout_toRightOf="@+id/longitude_label"
-        android:textSize="@dimen/default_text_size" />
+        android:textSize="@dimen/default_text_size"
+        android:layout_below="@+id/longitude_label"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/last_update_time_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/longitude_label"
         android:text="@string/last_update_time_label"
-        android:textSize="@dimen/default_text_size" />
+        android:textSize="@dimen/default_text_size"
+        android:layout_below="@+id/longitude_text"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/last_update_time_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/last_update_time_label"
-        android:layout_marginLeft="@dimen/small_margin_left"
-        android:layout_toRightOf="@+id/last_update_time_label"
-        android:textSize="@dimen/default_text_size" />
+        android:textSize="@dimen/default_text_size"
+        android:layout_below="@+id/last_update_time_label"
+        android:layout_alignParentLeft="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/heightText"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/height"
+        android:layout_toLeftOf="@+id/weight"
+        android:layout_toStartOf="@+id/weight" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/weightText"
+        android:layout_alignBaseline="@+id/weight"
+        android:layout_alignBottom="@+id/weight"
+        android:layout_toRightOf="@+id/weight"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Invite:"
+        android:id="@+id/invite"
+        android:layout_marginTop="38dp"
+        android:layout_below="@+id/heightText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/inviteText"
+        android:layout_alignBaseline="@+id/invite"
+        android:layout_alignBottom="@+id/invite"
+        android:layout_toRightOf="@+id/invite"
+        android:layout_toLeftOf="@+id/send_button"
+        android:layout_toStartOf="@+id/send_button" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send"
+        android:id="@+id/send_button"
+        android:layout_alignTop="@+id/inviteText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="startRunning"/>
+
+
 </RelativeLayout>

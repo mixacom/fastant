@@ -27,4 +27,7 @@
     <string name="last_update_time_label">Last location update time: </string>
 
     <string name="location_updated_message">Location updated</string>
+    <string name="title_activity_start">StartActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>
