@@ -127,8 +127,8 @@
         android:text="Speed"
         android:id="@+id/speed_text"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/last_update_time_text"
-        android:layout_toEndOf="@+id/last_update_time_text" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -137,15 +137,34 @@
         android:id="@+id/cal_text"
         android:layout_above="@+id/linechart"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="31dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0"
         android:id="@+id/cal_value"
-        android:layout_below="@+id/cal_text"
+        android:layout_alignTop="@+id/cal_text"
+        android:layout_alignRight="@+id/start_updates_button"
+        android:layout_alignEnd="@+id/start_updates_button" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Predict Calories "
+        android:id="@+id/cal_predict_text"
+        android:layout_above="@+id/linechart"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/cal_predict_val"
+        android:layout_alignBottom="@+id/cal_predict_text"
+        android:layout_alignLeft="@+id/cal_value"
+        android:layout_alignStart="@+id/cal_value" />
 
 </RelativeLayout>

@@ -99,6 +99,7 @@ public class MainActivity extends ActionBarActivity implements
     protected TextView mTotalDistanceTextView;
     protected TextView mSpeedTextView;
     protected TextView mCalTextView;
+    protected TextView mCalPredictTextView;
 
     private Date previousDate = new Date();
     private Date localDate = new Date();
@@ -122,6 +123,11 @@ public class MainActivity extends ActionBarActivity implements
     protected double weight;
     protected double distance;
 
+    /**
+     * Information about measurements
+     */
+    protected double timeSingleValue;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,6 +148,7 @@ public class MainActivity extends ActionBarActivity implements
         mTotalDistanceTextView = (TextView) findViewById(R.id.totalDistanceTextView);
         mSpeedTextView = (TextView) findViewById(R.id.speed_text);
         mCalTextView = (TextView) findViewById(R.id.cal_value);
+        mCalPredictTextView = (TextView) findViewById(R.id.cal_predict_val);
 
         mRequestingLocationUpdates = false;
         mLastUpdateTime = "";
@@ -322,10 +329,15 @@ public class MainActivity extends ActionBarActivity implements
                 userspeeds.add(speed);
                 mSpeedTextView.setText(String.valueOf(speed) + "km/h");
 
-                long localDateMS = localDate.getTime();
-                long previousDateMs = previousDate.getTime();
-                double timeValueSecond = (localDateMS - previousDateMs) / 1000;
-                mCalTextView.setText(String.valueOf(calorieCalculator(95, timeValueSecond, speed)));
+                double calValue = calorieCalculator(95, timeSingleValue / 3600, speed);
+                calValue = Math.round(calValue * 100) / 100;
+                calValue = calValue < 0 ? 0 : calValue;
+                calValue = calValue > 100 ? 100 : calValue;
+                calValue = calValue / 1000;
+                mCalTextView.setText(String.valueOf(calValue));
+
+                int predictedCalories = (int) Math.round((calValue / timeSingleValue)) * 3600;
+                mCalPredictTextView.setText(String.valueOf(predictedCalories));
             }
         }
     }
@@ -362,6 +374,8 @@ public class MainActivity extends ActionBarActivity implements
             long localDateMS = localDate.getTime();
             long previousDateMs = previousDate.getTime();
             double timeValueSecond = (localDateMS - previousDateMs) / 1000;
+
+            timeSingleValue = timeValueSecond;
 
             double distance = Double.parseDouble(mMoveTextView.getText().toString().substring(0, mMoveTextView.length() - 2));
             double speedValue = Math.round(((distance / timeValueSecond) * 3600 / 1000)*100)/100.0;
