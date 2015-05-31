@@ -16,18 +16,18 @@
 
 package com.google.android.gms.location.sample.locationupdates;
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.db.chart.model.LineSet;
+import com.db.chart.view.LineChartView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -39,23 +39,10 @@ import com.google.android.gms.location.LocationServices;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
-/**
- * Getting Location Updates.
- *
- * Demonstrates how to use the Fused Location Provider API to get updates about a device's
- * location. The Fused Location Provider is part of the Google Play services location APIs.
- *
- * For a simpler example that shows the use of Google Play services to fetch the last known location
- * of a device, see
- * https://github.com/googlesamples/android-play-location/tree/master/BasicLocation.
- *
- * This sample uses Google Play services, but it does not require authentication. For a sample that
- * uses Google Play services for authentication, see
- * https://github.com/googlesamples/android-google-accounts/tree/master/QuickStart.
- */
+
 public class MainActivity extends ActionBarActivity implements
         ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
@@ -73,6 +60,8 @@ public class MainActivity extends ActionBarActivity implements
      */
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
             UPDATE_INTERVAL_IN_MILLISECONDS / 2;
+
+
 
     // Keys for storing activity state in the Bundle.
     protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
@@ -94,14 +83,30 @@ public class MainActivity extends ActionBarActivity implements
      */
     protected Location mCurrentLocation;
 
+    private double previousLongitude;
+    private double localLongtitude;
+    private double previousLatitude;
+    private double localLatitude;
+    private double totalDistance = 0;
+
     // UI Widgets.
     protected Button mStartUpdatesButton;
     protected Button mStopUpdatesButton;
     protected TextView mLastUpdateTimeTextView;
     protected TextView mLatitudeTextView;
     protected TextView mLongitudeTextView;
-    protected TextView mDistanceTextView;
+    protected TextView mMoveTextView;
+    protected TextView mTotalDistanceTextView;
     protected TextView mSpeedTextView;
+    protected TextView mCalTextView;
+
+    private Date previousDate = new Date();
+    private Date localDate = new Date();
+
+    private ArrayList timeslots = new ArrayList();
+    private ArrayList userspeeds = new ArrayList();
+    private ArrayList compspeeds = new ArrayList();
+
 
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
@@ -113,25 +118,19 @@ public class MainActivity extends ActionBarActivity implements
      * Time when the location was updated represented as a String.
      */
     protected String mLastUpdateTime;
-
-    /**
-     * Save information about coordinates
-     */
-    private double previousLongitude;
-    private double localLongtitude;
-    private double previousLatitude;
-    private double localLatitude;
-
-    /**
-     * Save information about time between measurements
-     */
-    private Date previousDate = new Date();
-    private Date localDate = new Date();
+    protected String initialTime;
+    protected double weight;
+    protected double distance;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+        Bundle bundle = getIntent().getExtras();
+        //weight = Double.parseDouble(bundle.getString("EXTRA_WEIGHT"));
+        //distance = Double.parseDouble(bundle.getString("EXTRA_DISTANCE"));
+
 
         // Locate the UI widgets.
         mStartUpdatesButton = (Button) findViewById(R.id.start_updates_button);
@@ -139,11 +138,14 @@ public class MainActivity extends ActionBarActivity implements
         mLatitudeTextView = (TextView) findViewById(R.id.latitude_text);
         mLongitudeTextView = (TextView) findViewById(R.id.longitude_text);
         mLastUpdateTimeTextView = (TextView) findViewById(R.id.last_update_time_text);
-        mDistanceTextView = (TextView) findViewById(R.id.distance_text);
+        mMoveTextView = (TextView) findViewById(R.id.moveTextView);
+        mTotalDistanceTextView = (TextView) findViewById(R.id.totalDistanceTextView);
         mSpeedTextView = (TextView) findViewById(R.id.speed_text);
+        mCalTextView = (TextView) findViewById(R.id.cal_value);
 
         mRequestingLocationUpdates = false;
         mLastUpdateTime = "";
+        Date date = new Date();
 
         // Update values using data stored in the Bundle.
         updateValuesFromBundle(savedInstanceState);
@@ -151,6 +153,22 @@ public class MainActivity extends ActionBarActivity implements
         // Kick off the process of building a GoogleApiClient and requesting the LocationServices
         // API.
         buildGoogleApiClient();
+
+        String[] mLabels = {"ANT", "GNU", "OWL", "APE", "COD","YAK", "RAM", "JAY"};
+        LineChartView mLineChart = (LineChartView) findViewById(R.id.linechart);
+        LineSet data1 = new LineSet();
+        LineSet data2 = new LineSet();
+        float dataset1[] = {0.2f, 3.4f, 1.2f,4.3f,2.3f,4.3f,2.3f,3.1f };
+        float dataset2[] = {0.4f, 1.4f, 2.2f,4.3f,3.3f,4.4f,1.3f,2.1f };
+        data1.addPoints(mLabels, dataset1);
+        data2.addPoints(mLabels, dataset2);
+        //int[] colors1 = {Color.parseColor("#3388c6c3"), Color.TRANSPARENT};
+        data1.setLineColor(Color.parseColor("#3388c6c3"));
+        //int[] colors2 = {Color.parseColor("#1133c6c3"), Color.TRANSPARENT};
+        data2.setLineColor(Color.parseColor("#663313c3"));
+        mLineChart.addData(data1);
+        mLineChart.addData(data2);
+        mLineChart.show();
     }
 
     /**
@@ -289,20 +307,29 @@ public class MainActivity extends ActionBarActivity implements
             localLatitude = Double.parseDouble(mLatitudeTextView.getText().toString());
             localLongtitude = Double.parseDouble(mLongitudeTextView.getText().toString());
             double newDistance = Math.round(gps2m(previousLatitude, previousLongitude, localLatitude, localLongtitude) * 100) / 100.0;
-            if (!mStartUpdatesButton.isEnabled())
-                mDistanceTextView.setText(String.valueOf(newDistance) + " m");
+            totalDistance += newDistance;
+
+            if (!mStartUpdatesButton.isEnabled()) {
+                mMoveTextView.setText(String.valueOf(newDistance) + " m");
+                mTotalDistanceTextView.setText(String.valueOf(totalDistance) + "m");
+            }
             previousLatitude = localLatitude != 0 ? localLatitude : previousLongitude;
             previousLongitude = localLongtitude != 0 ? localLongtitude : previousLatitude;
 
-            if (!mStartUpdatesButton.isEnabled())
-                mSpeedTextView.setText(String.valueOf(timeToSpeed()));
+            if (!mStartUpdatesButton.isEnabled()) {
+                double speed = Double.parseDouble(timeToSpeed());
+                timeslots.add(System.currentTimeMillis());
+                userspeeds.add(speed);
+                mSpeedTextView.setText(String.valueOf(speed) + "km/h");
 
+                long localDateMS = localDate.getTime();
+                long previousDateMs = previousDate.getTime();
+                double timeValueSecond = (localDateMS - previousDateMs) / 1000;
+                mCalTextView.setText(String.valueOf(calorieCalculator(95, timeValueSecond, speed)));
+            }
         }
     }
 
-    /**
-     * Calculates distance between two measures.
-     */
     private double gps2m(double lat_a, double lng_a, double lat_b, double lng_b) {
         double pk = (double) (180/3.14169);
 
@@ -336,11 +363,11 @@ public class MainActivity extends ActionBarActivity implements
             long previousDateMs = previousDate.getTime();
             double timeValueSecond = (localDateMS - previousDateMs) / 1000;
 
-            double distance = Double.parseDouble(mDistanceTextView.getText().toString().substring(0, mDistanceTextView.length() - 2));
+            double distance = Double.parseDouble(mMoveTextView.getText().toString().substring(0, mMoveTextView.length() - 2));
             double speedValue = Math.round(((distance / timeValueSecond) * 3600 / 1000)*100)/100.0;
             if (speedValue < 0.01 || Double.isNaN(speedValue)) speedValue = 0;
 
-            speedValueText =  String.valueOf(speedValue) + " km/h";
+            speedValueText =  String.valueOf(speedValue);
 
             previousDate = localDate;
         }
@@ -351,16 +378,11 @@ public class MainActivity extends ActionBarActivity implements
         return speedValueText ; //  String.valueOf(timeValueMS);
     }
 
+
     /**
      * Removes location updates from the FusedLocationApi.
      */
     protected void stopLocationUpdates() {
-        // It is a good practice to remove location requests when the activity is in a paused or
-        // stopped state. Doing so helps battery performance and is especially
-        // recommended in applications that request frequent location updates.
-
-        // The final argument to {@code requestLocationUpdates()} is a LocationListener
-        // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
@@ -373,10 +395,6 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onResume() {
         super.onResume();
-        // Within {@code onPause()}, we pause location updates, but leave the
-        // connection to GoogleApiClient intact.  Here, we resume receiving
-        // location updates if the user has requested them.
-
         if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
             startLocationUpdates();
         }
@@ -404,25 +422,12 @@ public class MainActivity extends ActionBarActivity implements
     public void onConnected(Bundle connectionHint) {
         Log.i(TAG, "Connected to GoogleApiClient");
 
-        // If the initial location was never previously requested, we use
-        // FusedLocationApi.getLastLocation() to get it. If it was previously requested, we store
-        // its value in the Bundle and check for it in onCreate(). We
-        // do not request it again unless the user specifically requests location updates by pressing
-        // the Start Updates button.
-        //
-        // Because we cache the value of the initial location in the Bundle, it means that if the
-        // user launches the activity,
-        // moves to a new location, and then changes the device orientation, the original location
-        // is displayed as the activity is re-created.
         if (mCurrentLocation == null) {
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
             updateUI();
         }
 
-        // If the user presses the Start Updates button before GoogleApiClient connects, we set
-        // mRequestingLocationUpdates to true (see startUpdatesButtonHandler()). Here, we check
-        // the value of mRequestingLocationUpdates and if it is true, we start location updates.
         if (mRequestingLocationUpdates) {
             startLocationUpdates();
         }
@@ -442,8 +447,6 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onConnectionSuspended(int cause) {
-        // The connection to Google Play services was lost for some reason. We call connect() to
-        // attempt to re-establish the connection.
         Log.i(TAG, "Connection suspended");
         mGoogleApiClient.connect();
     }
@@ -466,19 +469,16 @@ public class MainActivity extends ActionBarActivity implements
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    public void startRunning(View view) {
-        Intent intent = new Intent(this, StartActivity.class);
-        EditText heightText = (EditText) findViewById(R.id.heightText);
-        EditText weightText = (EditText) findViewById(R.id.weightText);
-        EditText inviteText = (EditText) findViewById(R.id.inviteText);
-        String height = heightText.getText().toString();
-        String weight = weightText.getText().toString();
-        String invite = inviteText.getText().toString();
-        Bundle extras = new Bundle();
-        extras.putString("EXTRA_HEIGHT", height);
-        extras.putString("EXTRA_WEIGHT", weight);
-        extras.putString("EXTRA_INVITE", invite);
-        intent.putExtras(extras);
-        startActivity(intent);
+    /**
+     * Calculate the calorie
+     * @param weight (unit: kg)
+     * @param hours (unit: h), running time
+     * @param speed (unit: km/h)
+     * @return calorie
+     */
+    public double calorieCalculator(double weight, double hours, double speed) {
+        double K = 30 / (speed * 3.0 / 8.0);
+        return weight * hours * K;
     }
+
 }

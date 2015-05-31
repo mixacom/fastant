@@ -20,33 +20,13 @@
     android:padding="@dimen/layout_padding"
     android:id="@+id/main">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Height (cm): "
-        android:id="@+id/height"
-        android:layout_alignBaseline="@+id/heightText"
-        android:layout_alignBottom="@+id/heightText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Weight (kg): "
-        android:id="@+id/weight"
-        android:layout_alignBaseline="@+id/heightText"
-        android:layout_alignBottom="@+id/heightText"
-        android:layout_alignLeft="@+id/stop_updates_button"
-        android:layout_alignStart="@+id/stop_updates_button" />
-
     <Button
         android:id="@+id/start_updates_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="startUpdatesButtonHandler"
         android:text="@string/start_updates"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -112,138 +92,60 @@
         android:layout_below="@+id/last_update_time_label"
         android:layout_alignParentLeft="true" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/heightText"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/height"
-        android:layout_toLeftOf="@+id/weight"
-        android:layout_toStartOf="@+id/weight" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/weightText"
-        android:layout_alignBaseline="@+id/weight"
-        android:layout_alignBottom="@+id/weight"
-        android:layout_toRightOf="@+id/weight"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Invite:"
-        android:id="@+id/invite"
-        android:layout_alignBaseline="@+id/inviteText"
-        android:layout_alignBottom="@+id/inviteText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/inviteText"
-        android:layout_below="@+id/editText"
-        android:layout_toRightOf="@+id/invite"
-        android:layout_toLeftOf="@+id/send_button"
-        android:layout_toStartOf="@+id/send_button" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send"
-        android:id="@+id/send_button"
-        android:onClick="startRunning"
-        android:layout_alignBottom="@+id/inviteText"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Distance (km):"
-        android:id="@+id/distance_button"
-        android:layout_below="@+id/heightText"
+    <com.db.chart.view.LineChartView
+        xmlns:chart="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/linechart"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:checked="false"
-        android:layout_alignRight="@+id/start_updates_button"
-        android:layout_alignEnd="@+id/start_updates_button" />
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Time (min):    "
-        android:id="@+id/timeButton"
-        android:checked="false"
-        android:layout_below="@+id/distanceText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/distanceText"
-        android:layout_below="@+id/heightText"
-        android:layout_alignRight="@+id/stop_updates_button"
-        android:layout_alignEnd="@+id/stop_updates_button"
-        android:layout_toEndOf="@+id/distance_button"
-        android:layout_toRightOf="@+id/distance_button" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_below="@+id/distance_button"
-        android:layout_alignRight="@+id/distanceText"
-        android:layout_alignEnd="@+id/distanceText"
-        android:layout_toRightOf="@+id/timeButton"
-        android:layout_toEndOf="@+id/timeButton" />
+        android:layout_marginBottom="81dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/distancetextview"
-        android:id="@+id/distance_label"
-        android:layout_below="@+id/last_update_time_text"
+        android:text="Distance: "
+        android:id="@+id/moveTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textSize="@dimen/default_text_size" />
+        android:layout_below="@+id/last_update_time_text" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/distance_text"
-        android:layout_below="@+id/distance_label"
+        android:text="Total Distance:"
+        android:id="@+id/totalDistanceTextView"
+        android:layout_below="@+id/moveTextView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"
-        android:text="0 m"
-        android:layout_toStartOf="@+id/inviteText"
-        android:layout_alignRight="@+id/start_updates_button"
-        android:layout_alignEnd="@+id/start_updates_button" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="26dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/speedlabel"
-        android:id="@+id/speed_label"
-        android:textSize="@dimen/default_text_size"
-        android:layout_below="@+id/distance_text"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:text="Speed"
         android:id="@+id/speed_text"
-        android:textSize="@dimen/default_text_size"
-        android:text="0.0 km/h "
-        android:layout_below="@+id/speed_label"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/distance_text"
-        android:layout_alignEnd="@+id/distance_text" />
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/last_update_time_text"
+        android:layout_toEndOf="@+id/last_update_time_text" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calories "
+        android:id="@+id/cal_text"
+        android:layout_above="@+id/linechart"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/cal_value"
+        android:layout_below="@+id/cal_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

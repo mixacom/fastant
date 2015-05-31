@@ -30,6 +30,4 @@
     <string name="title_activity_start">StartActivity</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="distancetextview">Distance:</string>
-    <string name="speedlabel">Speed:</string>
 </resources>

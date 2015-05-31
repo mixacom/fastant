@@ -7,49 +7,119 @@
     tools:context="com.google.android.gms.location.sample.locationupdates.StartActivity"
     android:id="@+id/start">
 
-    <TextView android:text="Your invitation is accepted!" android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/accept"
-        android:textStyle="bold"
-        android:textSize="20dp"
-        android:layout_alignBottom="@+id/start_button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start"
         android:id="@+id/start_button"
+        android:onClick="enterMain"
+        android:layout_marginTop="118dp"
+        android:layout_below="@+id/timeText"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/heightText"
+        android:layout_marginTop="32dp"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/accept"
-        android:layout_toEndOf="@+id/accept" />
+        android:layout_toRightOf="@+id/heightTextView"
+        android:layout_toStartOf="@+id/weightTextView"
+        android:layout_toLeftOf="@+id/weightTextView" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Latitude: "
-        android:id="@+id/latitude"
+        android:text="Height (cm): "
+        android:id="@+id/heightTextView"
+        android:layout_alignBaseline="@+id/heightText"
+        android:layout_alignBottom="@+id/heightText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/weightText"
+        android:layout_above="@+id/distanceButton"
+        android:layout_toRightOf="@+id/start_button"
+        android:layout_marginLeft="38dp"
+        android:layout_marginStart="38dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Weight (kg):"
+        android:id="@+id/weightTextView"
+        android:layout_marginLeft="43dp"
+        android:layout_marginStart="43dp"
+        android:layout_alignBaseline="@+id/heightText"
+        android:layout_alignBottom="@+id/heightText"
+        android:layout_alignLeft="@+id/distanceText"
+        android:layout_alignStart="@+id/distanceText" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distance (km):"
+        android:id="@+id/distanceButton"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/heightText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:checked="false" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/distanceText"
+        android:layout_alignTop="@+id/distanceButton"
+        android:layout_alignLeft="@+id/start_button"
+        android:layout_alignStart="@+id/start_button"
+        android:layout_toLeftOf="@+id/weightText"
+        android:layout_toStartOf="@+id/weightText" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time (min):"
+        android:id="@+id/timeButton"
+        android:layout_marginTop="23dp"
+        android:checked="false"
+        android:layout_below="@+id/distanceText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/timeText"
+        android:layout_alignBottom="@+id/timeButton"
+        android:layout_alignLeft="@+id/distanceText"
+        android:layout_alignStart="@+id/distanceText"
+        android:layout_alignRight="@+id/distanceText"
+        android:layout_alignEnd="@+id/distanceText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/inviteText"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/weightText"
+        android:layout_alignEnd="@+id/weightText"
+        android:layout_toRightOf="@+id/textView"
+        android:layout_toEndOf="@+id/textView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Invite"
+        android:id="@+id/textView"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Longitude: "
-        android:id="@+id/longitude"
-        android:layout_marginTop="24dp"
-        android:layout_below="@+id/latitude"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lasttime"
-        android:layout_marginTop="23dp"
-        android:layout_below="@+id/longitude"
-        android:text="Last Location Update Game: " />
 
 </RelativeLayout>

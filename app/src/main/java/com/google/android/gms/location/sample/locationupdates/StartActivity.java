@@ -1,9 +1,12 @@
 package com.google.android.gms.location.sample.locationupdates;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 
 public class StartActivity extends ActionBarActivity {
@@ -13,10 +16,6 @@ public class StartActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        Bundle extras = getIntent().getExtras();
-        String height = extras.getString("EXTRA_HEIGHT");
-        String weight = extras.getString("EXTRA_WEIGHT");
-        String invite = extras.getString("EXTRA_INVITE");
     }
 
     @Override
@@ -39,5 +38,27 @@ public class StartActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void enterMain(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        EditText heightText = (EditText) findViewById(R.id.heightText);
+        EditText weightText = (EditText) findViewById(R.id.weightText);
+        EditText inviteText = (EditText) findViewById(R.id.inviteText);
+        EditText timeText = (EditText) findViewById(R.id.timeText);
+        EditText distanceText = (EditText) findViewById(R.id.distanceText);
+        String height = heightText.getText().toString();
+        String weight = weightText.getText().toString();
+        String invite = inviteText.getText().toString();
+        String time = timeText.getText().toString();
+        String distance = distanceText.getText().toString();
+        Bundle extras = new Bundle();
+        extras.putString("EXTRA_HEIGHT", height);
+        extras.putString("EXTRA_WEIGHT", weight);
+        extras.putString("EXTRA_INVITE", invite);
+        extras.putString("EXTRA_TIME", time);
+        extras.putString("EXTRA_DISTANCE", distance);
+        intent.putExtras(extras);
+        startActivity(intent);
     }
 }
