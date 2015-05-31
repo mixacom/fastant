@@ -218,9 +218,11 @@
         android:id="@+id/distance_text"
         android:layout_below="@+id/distance_label"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/last_update_time_text"
-        android:layout_alignEnd="@+id/last_update_time_text" />
+        android:layout_alignParentStart="false"
+        android:text="0 m"
+        android:layout_toStartOf="@+id/inviteText"
+        android:layout_alignRight="@+id/start_updates_button"
+        android:layout_alignEnd="@+id/start_updates_button" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -229,18 +231,19 @@
         android:id="@+id/speed_label"
         android:textSize="@dimen/default_text_size"
         android:layout_below="@+id/distance_text"
-        android:layout_alignLeft="@+id/distance_text"
-        android:layout_alignStart="@+id/distance_text" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/speed_text"
-        android:layout_below="@+id/speed_label"
-        android:layout_alignLeft="@+id/speed_label"
-        android:layout_alignStart="@+id/speed_label"
         android:textSize="@dimen/default_text_size"
-        android:text="0.0000001" />
+        android:text="0.0 km/h "
+        android:layout_below="@+id/speed_label"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/distance_text"
+        android:layout_alignEnd="@+id/distance_text" />
 
 
 </RelativeLayout>

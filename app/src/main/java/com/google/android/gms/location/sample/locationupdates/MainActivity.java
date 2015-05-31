@@ -125,8 +125,8 @@ public class MainActivity extends ActionBarActivity implements
     /**
      * Save information about time between measurements
      */
-    private Date previousDate;
-    private Date localDate;
+    private Date previousDate = new Date();
+    private Date localDate = new Date();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -324,25 +324,31 @@ public class MainActivity extends ActionBarActivity implements
      */
 
     protected String timeToSpeed() {
-        double timeValueMS = 0;
-        String localDateMS = "";
+
+        String speedValueText = "";
 
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss aa");
 
-            localDate = dateFormat.parse(mLastUpdateTime);
+            localDate = dateFormat.parse(mLastUpdateTimeTextView.getText().toString());
 
-            localDateMS = String.valueOf(localDate.getTime());
-/*            long previousDateMs = previousDate.getTime();
-            timeValueMS = (localDateMs - previousDateMs) / Double.parseDouble(mDistanceTextView.getText().toString());
-*/
+            long localDateMS = localDate.getTime();
+            long previousDateMs = previousDate.getTime();
+            double timeValueSecond = (localDateMS - previousDateMs) / 1000;
+
+            double distance = Double.parseDouble(mDistanceTextView.getText().toString().substring(0, mDistanceTextView.length() - 2));
+            double speedValue = Math.round(((distance / timeValueSecond) * 3600 / 1000)*100)/100.0;
+            if (speedValue < 0.01 || Double.isNaN(speedValue)) speedValue = 0;
+
+            speedValueText =  String.valueOf(speedValue) + " km/h";
+
             previousDate = localDate;
         }
         catch (ParseException e) {
             mSpeedTextView.setText(e.getMessage());
         }
 
-        return localDateMS ; //  String.valueOf(timeValueMS);
+        return speedValueText ; //  String.valueOf(timeValueMS);
     }
 
     /**
