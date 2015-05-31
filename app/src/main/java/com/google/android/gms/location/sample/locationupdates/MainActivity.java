@@ -87,7 +87,10 @@ public class MainActivity extends ActionBarActivity implements
     private double localLongtitude;
     private double previousLatitude;
     private double localLatitude;
-    private double totalDistance = 0;
+    private static double totalDistance = 0.0;
+    private static double compDistance = 0.0;
+    protected double timeSingleValue;
+
 
     // UI Widgets.
     protected Button mStartUpdatesButton;
@@ -98,15 +101,17 @@ public class MainActivity extends ActionBarActivity implements
     protected TextView mMoveTextView;
     protected TextView mTotalDistanceTextView;
     protected TextView mSpeedTextView;
+    protected LineChartView mLineChart;
     protected TextView mCalTextView;
     protected TextView mCalPredictTextView;
+
 
     private Date previousDate = new Date();
     private Date localDate = new Date();
 
-    private ArrayList timeslots = new ArrayList();
-    private ArrayList userspeeds = new ArrayList();
-    private ArrayList compspeeds = new ArrayList();
+    private static ArrayList<Long> timeslots = new ArrayList<Long>();
+    private static ArrayList<Float> userspeeds = new ArrayList<Float>();
+    private static ArrayList<Float> compspeeds = new ArrayList<Float>();
 
 
     /**
@@ -122,11 +127,6 @@ public class MainActivity extends ActionBarActivity implements
     protected String initialTime;
     protected double weight;
     protected double distance;
-
-    /**
-     * Information about measurements
-     */
-    protected double timeSingleValue;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -147,8 +147,11 @@ public class MainActivity extends ActionBarActivity implements
         mMoveTextView = (TextView) findViewById(R.id.moveTextView);
         mTotalDistanceTextView = (TextView) findViewById(R.id.totalDistanceTextView);
         mSpeedTextView = (TextView) findViewById(R.id.speed_text);
+        mLineChart = (LineChartView) findViewById(R.id.linechart);
         mCalTextView = (TextView) findViewById(R.id.cal_value);
         mCalPredictTextView = (TextView) findViewById(R.id.cal_predict_val);
+
+
 
         mRequestingLocationUpdates = false;
         mLastUpdateTime = "";
@@ -160,7 +163,7 @@ public class MainActivity extends ActionBarActivity implements
         // Kick off the process of building a GoogleApiClient and requesting the LocationServices
         // API.
         buildGoogleApiClient();
-
+        /*
         String[] mLabels = {"ANT", "GNU", "OWL", "APE", "COD","YAK", "RAM", "JAY"};
         LineChartView mLineChart = (LineChartView) findViewById(R.id.linechart);
         LineSet data1 = new LineSet();
@@ -176,6 +179,7 @@ public class MainActivity extends ActionBarActivity implements
         mLineChart.addData(data1);
         mLineChart.addData(data2);
         mLineChart.show();
+        */
     }
 
     /**
@@ -314,30 +318,67 @@ public class MainActivity extends ActionBarActivity implements
             localLatitude = Double.parseDouble(mLatitudeTextView.getText().toString());
             localLongtitude = Double.parseDouble(mLongitudeTextView.getText().toString());
             double newDistance = Math.round(gps2m(previousLatitude, previousLongitude, localLatitude, localLongtitude) * 100) / 100.0;
-            totalDistance += newDistance;
+
 
             if (!mStartUpdatesButton.isEnabled()) {
                 mMoveTextView.setText(String.valueOf(newDistance) + " m");
-                mTotalDistanceTextView.setText(String.valueOf(totalDistance) + "m");
+                totalDistance += newDistance;
+                double totalDistanceOutput = Math.round(totalDistance * 100) / 100.0;
+                totalDistanceOutput = totalDistanceOutput < 0 ? 0 : totalDistanceOutput;
+                mTotalDistanceTextView.setText(String.valueOf(totalDistanceOutput) + "m");
             }
             previousLatitude = localLatitude != 0 ? localLatitude : previousLongitude;
             previousLongitude = localLongtitude != 0 ? localLongtitude : previousLatitude;
 
             if (!mStartUpdatesButton.isEnabled()) {
                 double speed = Double.parseDouble(timeToSpeed());
-                timeslots.add(System.currentTimeMillis());
-                userspeeds.add(speed);
-                mSpeedTextView.setText(String.valueOf(speed) + "km/h");
 
-                double calValue = calorieCalculator(95, timeSingleValue / 3600, speed);
-                calValue = Math.round(calValue * 100) / 100;
+                timeslots.add(System.currentTimeMillis());
+                userspeeds.add((float) speed);
+                float randomspeed = (float)Math.random()*6;
+                compspeeds.add(randomspeed);
+                mSpeedTextView.setText(String.valueOf(speed) + " km/h");
+
+                double calValue = calorieCalculator(weight, timeSingleValue / 3600, speed);
                 calValue = calValue < 0 ? 0 : calValue;
                 calValue = calValue > 100 ? 100 : calValue;
-                calValue = calValue / 1000;
-                mCalTextView.setText(String.valueOf(calValue));
+                calValue = calValue / 1000.0 * 60;
+                calValue = Math.round(calValue * 100) / 100.0;
+                mCalTextView.setText(String.valueOf(calValue) + " kCal/m" );
+                compDistance += 5*randomspeed/3600*1000;
+                double predictedCalories = (calValue / timeSingleValue) * 60;
+                predictedCalories = (predictedCalories < 0 || predictedCalories > 100000) ? 0 : predictedCalories;
+                mCalPredictTextView.setText("~ " + String.valueOf(predictedCalories) + " kCal");
 
-                int predictedCalories = (int) Math.round((calValue / timeSingleValue)) * 3600;
-                mCalPredictTextView.setText(String.valueOf(predictedCalories));
+                if (compDistance > totalDistance)
+                    System.out.println("be faster!");
+                /*
+                //String[] mLabels = {"ANT", "GNU", "OWL", "APE", "COD","YAK", "RAM", "JAY"};
+                LineChartView mLineChart = (LineChartView) findViewById(R.id.linechart);
+                LineSet data1 = new LineSet();
+                LineSet data2 = new LineSet();
+                float[] dataset1 = new float[speedlist.length];
+                String[] mLabels = new String[speedlist.length];
+                //float dataset2[speedlist.length];
+                for (int i=0; i<speedlist.length; i++) {
+                    dataset1[i] = speedlist[i];
+                    mLabels[i] = "";
+                }
+                data1.addPoints(mLabels, dataset1);
+                //data2.addPoints(mLabels, dataset2);
+                //int[] colors1 = {Color.parseColor("#3388c6c3"), Color.TRANSPARENT};
+                data1.setLineColor(Color.parseColor("#3388c6c3"));
+                //int[] colors2 = {Color.parseColor("#1133c6c3"), Color.TRANSPARENT};
+                //data2.setLineColor(Color.parseColor("#663313c3"));
+
+
+                if (speedlist.length > 1) {
+                    mLineChart.updateValues(1, data1);
+                    //mLineChart.addData(data2);
+                    mLineChart.show();
+                }
+                */
+
             }
         }
     }
@@ -379,7 +420,7 @@ public class MainActivity extends ActionBarActivity implements
 
             double distance = Double.parseDouble(mMoveTextView.getText().toString().substring(0, mMoveTextView.length() - 2));
             double speedValue = Math.round(((distance / timeValueSecond) * 3600 / 1000)*100)/100.0;
-            if (speedValue < 0.01 || Double.isNaN(speedValue)) speedValue = 0;
+            if (speedValue < 0.01 || Double.isNaN(speedValue) || speedValue > 10000) speedValue = 0;
 
             speedValueText =  String.valueOf(speedValue);
 
@@ -397,6 +438,57 @@ public class MainActivity extends ActionBarActivity implements
      * Removes location updates from the FusedLocationApi.
      */
     protected void stopLocationUpdates() {
+
+        mLineChart = (LineChartView) findViewById(R.id.linechart);
+
+        /*String[] mLabels = {"ANT", "GNU", "OWL", "APE", "COD","YAK", "RAM", "JAY"};
+        LineSet data1 = new LineSet();
+        LineSet data2 = new LineSet();
+        float dataset1[] = {0.2f, 3.4f, 1.2f,4.3f,2.3f,4.3f,2.3f,3.1f };
+        float dataset2[] = {0.4f, 1.4f, 2.2f,4.3f,3.3f,4.4f,1.3f,2.1f };
+        data1.addPoints(mLabels, dataset1);
+        data2.addPoints(mLabels, dataset2);
+        //int[] colors1 = {Color.parseColor("#3388c6c3"), Color.TRANSPARENT};
+        data1.setLineColor(Color.parseColor("#3388c6c3"));
+        //int[] colors2 = {Color.parseColor("#1133c6c3"), Color.TRANSPARENT};
+        data2.setLineColor(Color.parseColor("#663313c3"));
+        mLineChart.addData(data1);
+        mLineChart.addData(data2);
+        mLineChart.show();*/
+        LineChartView mLineChart = (LineChartView) findViewById(R.id.linechart);
+        LineSet data1 = new LineSet();
+        LineSet data2 = new LineSet();
+
+        Float[] speedlist = userspeeds.toArray(new Float[userspeeds.size()]);
+        Float[] compspeedlist = compspeeds.toArray(new Float[userspeeds.size()]);
+        Long[] timelist = timeslots.toArray(new Long[timeslots.size()]);
+        System.out.println(speedlist);
+        System.out.println(timelist);
+
+        float[] dataset1 = new float[speedlist.length];
+        float[] dataset2 = new float[compspeedlist.length];
+        String[] mLabels = new String[speedlist.length];
+        //float dataset2[speedlist.length];
+        for (int i=0; i<speedlist.length; i++) {
+            dataset1[i] = speedlist[i];
+            mLabels[i] = "";
+        }
+        data1.addPoints(mLabels, dataset1);
+        data2.addPoints(mLabels, dataset2);
+        //int[] colors1 = {Color.parseColor("#3388c6c3"), Color.TRANSPARENT};
+        data1.setLineColor(Color.parseColor("#3388c6c3"));
+        //int[] colors2 = {Color.parseColor("#1133c6c3"), Color.TRANSPARENT};
+        data2.setLineColor(Color.parseColor("#663313c3"));
+
+
+
+        if (speedlist.length > 1) {
+            mLineChart.addData(data1);
+            mLineChart.addData(data2);
+            mLineChart.show();
+        }
+
+
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
@@ -421,6 +513,7 @@ public class MainActivity extends ActionBarActivity implements
         if (mGoogleApiClient.isConnected()) {
             stopLocationUpdates();
         }
+
     }
 
     @Override
@@ -484,9 +577,9 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     /**
-     * Calculate the calorie
+     * Calculate the carlorie
      * @param weight (unit: kg)
-     * @param hours (unit: h), running time
+     * @param hours (unit: h)
      * @param speed (unit: km/h)
      * @return calorie
      */

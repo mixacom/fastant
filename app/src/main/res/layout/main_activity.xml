@@ -48,15 +48,19 @@
         android:text="@string/latitude_label"
         android:textSize="@dimen/default_text_size"
         android:layout_below="@+id/stop_updates_button"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="12dp" />
 
     <TextView
         android:id="@+id/latitude_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/default_text_size"
-        android:layout_below="@+id/latitude_label"
-        android:layout_alignParentLeft="true" />
+        android:text="0"
+        android:layout_below="@+id/start_updates_button"
+        android:layout_toRightOf="@+id/distance_total_text"
+        android:layout_toEndOf="@+id/distance_total_text"
+        android:layout_marginTop="12dp" />
 
     <TextView
         android:id="@+id/longitude_label"
@@ -65,15 +69,19 @@
         android:text="@string/longitude_label"
         android:textSize="@dimen/default_text_size"
         android:layout_below="@+id/latitude_text"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="2dp" />
 
     <TextView
         android:id="@+id/longitude_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/default_text_size"
-        android:layout_below="@+id/longitude_label"
-        android:layout_alignParentLeft="true" />
+        android:text="0"
+        android:layout_below="@+id/latitude_text"
+        android:layout_alignLeft="@+id/latitude_text"
+        android:layout_alignStart="@+id/latitude_text"
+        android:layout_marginTop="2dp" />
 
     <TextView
         android:id="@+id/last_update_time_label"
@@ -82,15 +90,19 @@
         android:text="@string/last_update_time_label"
         android:textSize="@dimen/default_text_size"
         android:layout_below="@+id/longitude_text"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="2dp" />
 
     <TextView
         android:id="@+id/last_update_time_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/default_text_size"
-        android:layout_below="@+id/last_update_time_label"
-        android:layout_alignParentLeft="true" />
+        android:text="now"
+        android:layout_below="@+id/longitude_text"
+        android:layout_alignLeft="@+id/totalDistanceTextView"
+        android:layout_alignStart="@+id/totalDistanceTextView"
+        android:layout_marginTop="2dp" />
 
     <com.db.chart.view.LineChartView
         xmlns:chart="http://schemas.android.com/apk/res-auto"
@@ -99,72 +111,118 @@
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="81dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Distance: "
-        android:id="@+id/moveTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/last_update_time_text" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total Distance:"
-        android:id="@+id/totalDistanceTextView"
-        android:layout_below="@+id/moveTextView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="26dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Speed"
-        android:id="@+id/speed_text"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Calories "
+        android:text="0 km "
+        android:id="@+id/moveTextView"
+        android:textSize="@dimen/default_text_size"
+        android:layout_below="@+id/last_update_time_text"
+        android:layout_alignLeft="@+id/totalDistanceTextView"
+        android:layout_alignStart="@+id/totalDistanceTextView"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 km"
+        android:id="@+id/totalDistanceTextView"
+        android:textSize="@dimen/default_text_size"
+        android:layout_below="@+id/moveTextView"
+        android:layout_alignLeft="@+id/cal_value"
+        android:layout_alignStart="@+id/cal_value"
+        android:layout_marginTop="2dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 km/h "
+        android:id="@+id/speed_text"
+        android:textSize="@dimen/default_text_size"
+        android:layout_alignTop="@+id/speed_textw"
+        android:layout_alignLeft="@+id/moveTextView"
+        android:layout_alignStart="@+id/moveTextView"
+        android:layout_marginTop="2dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Realtime Calories Meter: "
         android:id="@+id/cal_text"
-        android:layout_above="@+id/linechart"
+        android:layout_below="@+id/speed_text"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="31dp" />
+        android:textSize="@dimen/default_text_size"
+        android:layout_marginTop="2dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0"
         android:id="@+id/cal_value"
-        android:layout_alignTop="@+id/cal_text"
-        android:layout_alignRight="@+id/start_updates_button"
-        android:layout_alignEnd="@+id/start_updates_button" />
+        android:textSize="@dimen/default_text_size"
+        android:layout_above="@+id/cal_predict_val"
+        android:layout_toRightOf="@+id/last_update_time_label"
+        android:layout_toEndOf="@+id/last_update_time_label"
+        android:layout_marginLeft="22dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="2dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Predict Calories "
-        android:id="@+id/cal_predict_text"
-        android:layout_above="@+id/linechart"
+        android:text="Burn Calories in Next Hour: "
+        android:id="@+id/predict_value"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/cal_text"
+        android:textSize="@dimen/default_text_size"
+        android:layout_marginTop="2dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0"
         android:id="@+id/cal_predict_val"
-        android:layout_alignBottom="@+id/cal_predict_text"
-        android:layout_alignLeft="@+id/cal_value"
-        android:layout_alignStart="@+id/cal_value" />
+        android:layout_below="@+id/cal_text"
+        android:layout_alignRight="@+id/cal_value"
+        android:layout_alignEnd="@+id/cal_value"
+        android:textSize="@dimen/default_text_size"
+        android:layout_marginTop="2dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distance: "
+        android:id="@+id/distance_text"
+        android:textSize="@dimen/default_text_size"
+        android:layout_below="@+id/last_update_time_label"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="12dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Distance: "
+        android:id="@+id/distance_total_text"
+        android:layout_alignTop="@+id/totalDistanceTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/default_text_size"
+        android:layout_marginTop="2dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Speed: "
+        android:id="@+id/speed_textw"
+        android:layout_below="@+id/distance_total_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/default_text_size"
+        android:layout_marginTop="2dp" />
 
 </RelativeLayout>

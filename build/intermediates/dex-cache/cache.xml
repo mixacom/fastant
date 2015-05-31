@@ -2,6 +2,13 @@
 <items version="2" >
 
     <item
+        jar="C:\Users\Mikhail\Documents\GitHub\fastant\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="C:\Users\Mikhail\Documents\GitHub\fastant\app\build\intermediates\pre-dexed\debug\classes-47a7b6d86e333ecd0dfc6b47ec91d1a1b72a0bc2.jar" />
+    </item>
+    <item
         jar="C:\Users\Mikhail\Documents\GitHub\fastant\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\jars\classes.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -16,20 +23,6 @@
         <dex dex="C:\Users\Mikhail\Documents\GitHub\fastant\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-158d6120cbf30176d946cb65e9488010f4b8ef84.jar" />
     </item>
     <item
-        jar="C:\Users\Mikhail\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="C:\Users\Mikhail\Documents\GitHub\fastant\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-d568a54782452387f28594c365765c6dbc6ef87e.jar" />
-    </item>
-    <item
-        jar="C:\Users\Mikhail\Documents\GitHub\fastant\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="C:\Users\Mikhail\Documents\GitHub\fastant\app\build\intermediates\pre-dexed\debug\classes-47a7b6d86e333ecd0dfc6b47ec91d1a1b72a0bc2.jar" />
-    </item>
-    <item
         jar="C:\Users\Mikhail\Documents\GitHub\fastant\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\6.5.87\jars\classes.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -42,6 +35,13 @@
         revision="21.1.2"
         sha1="862312b39b3acd6c11012350a7203ea6cd2fc456">
         <dex dex="C:\Users\Mikhail\Documents\GitHub\fastant\app\build\intermediates\pre-dexed\debug\classes-5544c3b12abecd291118cf80f3bc764e0e3d049a.jar" />
+    </item>
+    <item
+        jar="C:\Users\Mikhail\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="C:\Users\Mikhail\Documents\GitHub\fastant\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-d568a54782452387f28594c365765c6dbc6ef87e.jar" />
     </item>
 
 </items>
