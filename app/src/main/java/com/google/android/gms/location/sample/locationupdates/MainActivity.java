@@ -18,6 +18,7 @@ package com.google.android.gms.location.sample.locationupdates;
 
 import android.graphics.Color;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -88,6 +89,7 @@ public class MainActivity extends ActionBarActivity implements
     private double previousLatitude;
     private double localLatitude;
     private static double totalDistance = 0.0;
+    private static int status = 0; //1 i'm faster before 2 he is faster before
     private static double compDistance = 0.0;
     protected double timeSingleValue;
 
@@ -134,7 +136,7 @@ public class MainActivity extends ActionBarActivity implements
         setContentView(R.layout.main_activity);
 
         Bundle bundle = getIntent().getExtras();
-        //weight = Double.parseDouble(bundle.getString("EXTRA_WEIGHT"));
+        weight = Double.parseDouble(bundle.getString("EXTRA_WEIGHT"));
         //distance = Double.parseDouble(bundle.getString("EXTRA_DISTANCE"));
 
 
@@ -319,7 +321,53 @@ public class MainActivity extends ActionBarActivity implements
             localLongtitude = Double.parseDouble(mLongitudeTextView.getText().toString());
             double newDistance = Math.round(gps2m(previousLatitude, previousLongitude, localLatitude, localLongtitude) * 100) / 100.0;
 
+ /*
+            if (!mStartUpdatesButton.isEnabled()) {
+                mMoveTextView.setText(String.valueOf(newDistance) + " m");
+                totalDistance += newDistance;
 
+                mTotalDistanceTextView.setText(String.valueOf(totalDistance) + "m");
+            }
+            previousLatitude = localLatitude != 0 ? localLatitude : previousLongitude;
+            previousLongitude = localLongtitude != 0 ? localLongtitude : previousLatitude;
+
+
+            if (!mStartUpdatesButton.isEnabled()) {
+                double speed = Double.parseDouble(timeToSpeed());
+
+                timeslots.add(System.currentTimeMillis());
+                userspeeds.add((float) speed);
+                float randomspeed = (float)Math.random()*6;
+                compspeeds.add(randomspeed);
+                mSpeedTextView.setText(String.valueOf(speed) + "km/h");
+
+                //TODO: change weight
+                double calValue = calorieCalculator(weight, timeSingleValue / 3600, speed);
+                calValue = Math.round(calValue * 100) / 100;
+                calValue = calValue < 0 ? 0 : calValue;
+                calValue = calValue > 100 ? 100 : calValue;
+                calValue = calValue / 1000;
+                mCalTextView.setText(String.valueOf(calValue));
+                compDistance += 5*randomspeed/3600*1000;
+                int predictedCalories = (int) Math.round((calValue / timeSingleValue)) * 3600;
+                mCalPredictTextView.setText(String.valueOf(predictedCalories));
+
+
+                if (compDistance > totalDistance) {
+                    if (status == 0 || status == 1) {
+                        MediaPlayer mediaPlayer1 = MediaPlayer.create(getApplicationContext(), R.raw.tooslow);
+                        mediaPlayer1.start();
+                        status = 2;
+                    }
+                } else {
+                    if (status == 0 || status == 2) {
+                        MediaPlayer mediaPlayer2 = MediaPlayer.create(getApplicationContext(), R.raw.toofast);
+                        mediaPlayer2.start();
+                        status = 1;
+                    }
+                }
+            }
+            */
             if (!mStartUpdatesButton.isEnabled()) {
                 mMoveTextView.setText(String.valueOf(newDistance) + " m");
                 totalDistance += newDistance;
@@ -329,56 +377,37 @@ public class MainActivity extends ActionBarActivity implements
             }
             previousLatitude = localLatitude != 0 ? localLatitude : previousLongitude;
             previousLongitude = localLongtitude != 0 ? localLongtitude : previousLatitude;
-
             if (!mStartUpdatesButton.isEnabled()) {
                 double speed = Double.parseDouble(timeToSpeed());
-
                 timeslots.add(System.currentTimeMillis());
                 userspeeds.add((float) speed);
-                float randomspeed = (float)Math.random()*6;
+                float randomspeed = (float) Math.random() * 2;
                 compspeeds.add(randomspeed);
                 mSpeedTextView.setText(String.valueOf(speed) + " km/h");
-
                 double calValue = calorieCalculator(weight, timeSingleValue / 3600, speed);
                 calValue = calValue < 0 ? 0 : calValue;
                 calValue = calValue > 100 ? 100 : calValue;
                 calValue = calValue / 1000.0 * 60;
                 calValue = Math.round(calValue * 100) / 100.0;
-                mCalTextView.setText(String.valueOf(calValue) + " kCal/m" );
-                compDistance += 5*randomspeed/3600*1000;
+                mCalTextView.setText(String.valueOf(calValue) + " kCal/m");
+                compDistance += 5 * randomspeed / 3600 * 1000;
                 double predictedCalories = (calValue / timeSingleValue) * 60;
                 predictedCalories = (predictedCalories < 0 || predictedCalories > 100000) ? 0 : predictedCalories;
                 mCalPredictTextView.setText("~ " + String.valueOf(predictedCalories) + " kCal");
 
-                if (compDistance > totalDistance)
-                    System.out.println("be faster!");
-                /*
-                //String[] mLabels = {"ANT", "GNU", "OWL", "APE", "COD","YAK", "RAM", "JAY"};
-                LineChartView mLineChart = (LineChartView) findViewById(R.id.linechart);
-                LineSet data1 = new LineSet();
-                LineSet data2 = new LineSet();
-                float[] dataset1 = new float[speedlist.length];
-                String[] mLabels = new String[speedlist.length];
-                //float dataset2[speedlist.length];
-                for (int i=0; i<speedlist.length; i++) {
-                    dataset1[i] = speedlist[i];
-                    mLabels[i] = "";
+                if (compDistance > totalDistance) {
+                    if (status == 0 || status == 1) {
+                        MediaPlayer mediaPlayer1 = MediaPlayer.create(getApplicationContext(), R.raw.tooslow);
+                        mediaPlayer1.start();
+                        status = 2;
+                    }
+                } else {
+                    if (status == 0 || status == 2) {
+                        MediaPlayer mediaPlayer2 = MediaPlayer.create(getApplicationContext(), R.raw.toofast);
+                        mediaPlayer2.start();
+                        status = 1;
+                    }
                 }
-                data1.addPoints(mLabels, dataset1);
-                //data2.addPoints(mLabels, dataset2);
-                //int[] colors1 = {Color.parseColor("#3388c6c3"), Color.TRANSPARENT};
-                data1.setLineColor(Color.parseColor("#3388c6c3"));
-                //int[] colors2 = {Color.parseColor("#1133c6c3"), Color.TRANSPARENT};
-                //data2.setLineColor(Color.parseColor("#663313c3"));
-
-
-                if (speedlist.length > 1) {
-                    mLineChart.updateValues(1, data1);
-                    //mLineChart.addData(data2);
-                    mLineChart.show();
-                }
-                */
-
             }
         }
     }
@@ -404,32 +433,23 @@ public class MainActivity extends ActionBarActivity implements
      */
 
     protected String timeToSpeed() {
-
         String speedValueText = "";
-
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss aa");
-
             localDate = dateFormat.parse(mLastUpdateTimeTextView.getText().toString());
-
             long localDateMS = localDate.getTime();
             long previousDateMs = previousDate.getTime();
             double timeValueSecond = (localDateMS - previousDateMs) / 1000;
-
             timeSingleValue = timeValueSecond;
-
             double distance = Double.parseDouble(mMoveTextView.getText().toString().substring(0, mMoveTextView.length() - 2));
             double speedValue = Math.round(((distance / timeValueSecond) * 3600 / 1000)*100)/100.0;
             if (speedValue < 0.01 || Double.isNaN(speedValue) || speedValue > 10000) speedValue = 0;
-
             speedValueText =  String.valueOf(speedValue);
-
             previousDate = localDate;
         }
         catch (ParseException e) {
             mSpeedTextView.setText(e.getMessage());
         }
-
         return speedValueText ; //  String.valueOf(timeValueMS);
     }
 
@@ -471,6 +491,7 @@ public class MainActivity extends ActionBarActivity implements
         //float dataset2[speedlist.length];
         for (int i=0; i<speedlist.length; i++) {
             dataset1[i] = speedlist[i];
+            dataset2[i] = compspeedlist[i];
             mLabels[i] = "";
         }
         data1.addPoints(mLabels, dataset1);
